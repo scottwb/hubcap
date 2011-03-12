@@ -2,9 +2,11 @@ GEM
   remote: http://rubygems.org/
   specs:
     api_cache (0.2.0)
+    awesome_print (0.3.2)
     crack (0.1.8)
     httparty (0.7.4)
       crack (= 0.1.8)
+    jsonpretty (1.1.0)
     mechanize (1.0.0)
       nokogiri (>= 1.2.1)
     nokogiri (1.4.4)
@@ -18,4 +20,6 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  awesome_print
+  jsonpretty
   octopi
