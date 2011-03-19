@@ -70,6 +70,9 @@ module Hubcap
       return issues
     end
 
+    ##############################
+    # Labels
+    ##############################
     def labels
       exec{Octopi::Issue.labels(:repo => @repo)}['labels']
     end
@@ -80,6 +83,31 @@ module Hubcap
 
     def del_label(label)
       exec{Octopi::Issue.del_label(:repo => @repo, :label => label)}['labels']
+    end
+    
+
+    ##############################
+    # Users
+    ##############################
+
+    def user_to_label(user)
+      "user-#{user}"
+    end
+
+    def user_from_label(label)
+      label[/^user-(.+)/,1]
+    end
+    
+    def users
+      labels.map{|label| user_from_label(label)}.compact.sort
+    end
+
+    def add_user(user)
+      add_label(user_to_label(user)).map{|label| user_from_label(label)}.compact
+    end
+    
+    def del_user(user)
+      del_label(user_to_label(user)).map{|label| user_from_label(label)}.compact
     end
   end
 end

@@ -28,6 +28,24 @@ def test_del_label
   ap @session.del_label('defect')
 end
 
+def test_user_list
+  puts
+  puts "This repo has the following users:"
+  ap @session.users
+end
+
+def test_add_user
+  puts
+  puts "Adding a 'scottwb' user"
+  ap @session.add_user('scottwb')
+end
+
+def test_del_user
+  puts
+  puts "Removing the 'scottwb' user"
+  ap @session.del_user('scottwb')
+end
+
 def test_issue_filter
   puts
   puts "Scottwb has the following defects on this repo:"
@@ -41,9 +59,19 @@ end
 
 ############################################################
 
+# Label tests
 test_label_list
 test_add_label
 test_label_list
 test_del_label
 test_label_list
+
+# User tests
+test_user_list
+test_add_user
+test_user_list
+test_del_user
+test_user_list
+
+# Issue tests
 test_issue_filter
