@@ -74,15 +74,15 @@ module Hubcap
     # Labels
     ##############################
     def labels
-      exec{Octopi::Issue.labels(:repo => @repo)}['labels']
+      exec{Octopi::Issue.labels(:repo => @repo)}['labels'].sort
     end
 
     def add_label(label)
-      exec{Octopi::Issue.add_label(:repo => @repo, :label => label)}['labels']
+      exec{Octopi::Issue.add_label(:repo => @repo, :label => label)}['labels'].sort
     end
 
     def del_label(label)
-      exec{Octopi::Issue.del_label(:repo => @repo, :label => label)}['labels']
+      exec{Octopi::Issue.del_label(:repo => @repo, :label => label)}['labels'].sort
     end
     
 
@@ -99,7 +99,7 @@ module Hubcap
     end
 
     def users
-      labels.map{|label| user_from_label(label)}.compact.sort
+      labels.map{|label| user_from_label(label)}.compact
     end
 
     def add_user(user)
