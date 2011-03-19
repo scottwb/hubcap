@@ -4,6 +4,7 @@ GEM
     api_cache (0.2.0)
     awesome_print (0.3.2)
     crack (0.1.8)
+    diff-lcs (1.1.2)
     httparty (0.7.4)
       crack (= 0.1.8)
     jsonpretty (1.1.0)
@@ -15,6 +16,14 @@ GEM
       httparty (>= 0.4.5)
       mechanize (>= 0.9.3)
       nokogiri (>= 1.3.1)
+    rspec (2.5.0)
+      rspec-core (~> 2.5.0)
+      rspec-expectations (~> 2.5.0)
+      rspec-mocks (~> 2.5.0)
+    rspec-core (2.5.1)
+    rspec-expectations (2.5.0)
+      diff-lcs (~> 1.1.2)
+    rspec-mocks (2.5.0)
 
 PLATFORMS
   ruby
@@ -23,3 +32,4 @@ DEPENDENCIES
   awesome_print
   jsonpretty
   octopi
+  rspec (~> 2.5.0)
