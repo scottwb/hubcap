@@ -97,7 +97,7 @@ module Hubcap
     def user_from_label(label)
       label[/^user-(.+)/,1]
     end
-    
+
     def users
       labels.map{|label| user_from_label(label)}.compact.sort
     end
@@ -105,7 +105,7 @@ module Hubcap
     def add_user(user)
       add_label(user_to_label(user)).map{|label| user_from_label(label)}.compact
     end
-    
+
     def del_user(user)
       del_label(user_to_label(user)).map{|label| user_from_label(label)}.compact
     end
