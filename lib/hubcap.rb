@@ -89,7 +89,6 @@ module Hubcap
     ##############################
     # Users
     ##############################
-
     def user_to_label(user)
       "user-#{user}"
     end
