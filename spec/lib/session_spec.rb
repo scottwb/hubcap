@@ -184,11 +184,5 @@ describe Hubcap::Session do
         pending
       end
     end
-
-    describe "#del_issue" do
-      it "should delete the specified issue only if it already exists" do
-        pending
-      end
-    end
   end
 end
