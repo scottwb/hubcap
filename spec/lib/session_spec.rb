@@ -115,6 +115,10 @@ describe Hubcap::Session do
   # Issues Methods
   ############################################################
   describe "Issue Methods" do
+    before :each do
+      @session.issues.each{|issue| issue.close!}
+    end
+
     describe "#issues" do
       it "should return an empty array if the repository has no issues" do
         @session.issues.should be_empty

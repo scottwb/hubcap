@@ -49,6 +49,10 @@ module Hubcap
         issues.reject!{|i| (filter_by_labels - i.labels).any?}
       end
 
+      issues.each do |issue|
+        issue.hubcap_session = self
+      end
+
       return issues
     end
 
@@ -56,12 +60,16 @@ module Hubcap
       params = {}
       params[:title] = opts[:title] if opts[:title]
       params[:body]  = opts[:description] if opts[:description]
-      exec do
+
+      issue = exec do
         Octopi::Issue.open(
           :repo   => @repo,
           :params => params
         )
       end
+
+      issue.hubcap_session = self
+      return issue
     end
 
     ##############################

@@ -69,5 +69,19 @@ module Octopi
       user, repo = gather_details(options)
       Api.api.get("/issues/label/remove/#{user}/#{repo}/#{options[:label]}")
     end
+
+    attr_accessor :hubcap_session
+
+    method = :close!
+    authed_method   = "authed_#{method}".to_sym
+    unauthed_method = "unauthed_#{method}".to_sym
+    define_method(authed_method) do
+      hubcap_session.exec{send(unauthed_method)}
+    end
+    alias_method unauthed_method, method
+    define_method(method) do
+      send(hubcap_session ? authed_method : unauthed_method)
+    end
+
   end
 end
