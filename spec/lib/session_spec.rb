@@ -173,13 +173,47 @@ describe Hubcap::Session do
         pending
       end
 
-      it "should be able to filter issues by label" do
-        pending
-      end
+      it "should be able to filter issues by label(s)" do
+        prefix = Digest::MD5.hexdigest(Time.now.to_s)[0,8]
 
-      it "should be able to filter issues by multiple labels" do
-        pending
-      end
+        @session.add_issue(
+          :title  => "Label filter test #{prefix}-1",
+          :labels => ["#{prefix}-1"]
+        )
+        @session.add_issue(
+          :title  => "Label filter test #{prefix}-2",
+          :labels => ["#{prefix}-1", "#{prefix}-2"]
+        )
+        @session.add_issue(
+          :title  => "Label filter test #{prefix}-3",
+          :labels => ["#{prefix}-2", "#{prefix}-3"]
+        )
+
+        issues = @session.issues(:labels => ["#{prefix}-1"])
+        issues.should have(2).issues
+        issues.first.title.should == "Label filter test #{prefix}-1"
+        issues.last.title.should == "Label filter test #{prefix}-2"
+
+        issues = @session.issues(:labels => ["#{prefix}-2"])
+        issues.should have(2).issues
+        issues.first.title.should == "Label filter test #{prefix}-2"
+        issues.last.title.should == "Label filter test #{prefix}-3"
+
+        issues = @session.issues(:labels => ["#{prefix}-3"])
+        issues.should have(1).issue
+        issues.first.title.should == "Label filter test #{prefix}-3"
+
+        issues = @session.issues(:labels => ["#{prefix}-1", "#{prefix}-2"])
+        issues.should have(1).issue
+        issues.first.title.should == "Label filter test #{prefix}-2"
+ 
+        issues = @session.issues(:labels => ["#{prefix}-3", "#{prefix}-2"])
+        issues.should have(1).issue
+        issues.first.title.should == "Label filter test #{prefix}-3"
+
+        issues = @session.issues(:labels => ["#{prefix}-3", "#{prefix}-1"])
+        issues.should be_empty
+     end
 
       it "should be able to filter issues by user" do
         pending
