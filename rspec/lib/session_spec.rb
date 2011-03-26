@@ -148,21 +148,21 @@ describe Hubcap::Session do
         pending
       end
     end
-  end
 
-  describe "#add_issue" do
-    it "should create a new open issue, with no user or labels by default" do
-      pending
+    describe "#add_issue" do
+      it "should create a new open issue, with no user or labels by default" do
+        pending
+      end
+
+      it "should be able to create a new open issue with a user and labels" do
+        pending
+      end
     end
 
-    it "should be able to create a new open issue with a user and labels" do
-      pending
-    end
-  end
-
-  describe "#del_issue" do
-    it "should delete the specified issue only if it already exists" do
-      pending
+    describe "#del_issue" do
+      it "should delete the specified issue only if it already exists" do
+        pending
+      end
     end
   end
 end
