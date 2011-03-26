@@ -217,19 +217,63 @@ describe Hubcap::Session do
         pending
       end
     end
-  end
 
-  describe "#find_issue" do
-    it "should be able to find an issue by number" do
-      pending
-    end
+    describe "#find_issue" do
+      it "should be able to find an issue by number" do
+        issue = @session.find_issue(1)
+        issue.should_not be_nil
+        issue.should be_an Octopi::Issue
+        issue.number.should == 1
+        issue.state.should == 'closed'
+      end
 
-    it "should return nil if the issue is not found" do
-      pending
-    end
+      it "should return nil if the issue is not found" do
+        @session.find_issue(99999).should be_nil
+      end
 
-    it "should return an authenticated instance of Octopi::Issue" do
-      pending
+      it "should return an authenticated instance of Octopi::Issue" do
+        prefix = Digest::MD5.hexdigest(Time.now.to_s)[0,8]
+
+        issue = @session.find_issue(1)
+        issue.state.should == 'closed'
+
+        # Test that we can do this w/o explicit auth.
+        issue.reopen!
+        issue = @session.find_issue(1)
+        issue.state.should == 'open'
+
+        issue.title = "Title for save test #{prefix}"
+        issue.body  = "Body for save test #{prefix}"
+        issue.save
+        issue = @session.find_issue(1)
+        issue.state.should == 'open'
+        issue.title.should == "Title for save test #{prefix}"
+        issue.body.should == "Body for save test #{prefix}"
+
+        issue.comment("Test comment for #{prefix}")
+        issue = @session.find_issue(1)
+        comments = issue.comments
+        comments.map(&:body).should include "Test comment for #{prefix}"
+        comments.last.body.should == "Test comment for #{prefix}"
+
+        issue.labels.should_not include prefix
+        issue.add_label(prefix)
+        issue.labels.should include prefix
+        issue = @session.find_issue(1)
+        issue.labels.should include prefix
+
+        issue.remove_label(prefix)
+        issue.labels.should_not include prefix
+        issue = @session.find_issue(1)
+        issue.labels.should_not include prefix
+
+        @session.del_label(prefix)
+
+        # Test that we can do this w/o explicit auth.
+        issue.close!
+        issue = @session.find_issue(1)
+        issue.state.should == 'closed'
+      end
     end
   end
 end

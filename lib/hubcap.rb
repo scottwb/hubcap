@@ -56,6 +56,14 @@ module Hubcap
       return issues
     end
 
+    def find_issue(number)
+      issue = exec{Octopi::Issue.find(:repo => @repo, :number => number)}
+      issue.hubcap_session = self
+      issue
+    rescue Octopi::NotFound => e
+      nil
+    end
+
     def add_issue(opts = {})
       params = {}
       params[:title] = opts[:title] if opts[:title]
