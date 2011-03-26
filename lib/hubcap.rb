@@ -76,7 +76,13 @@ module Hubcap
         )
       end
 
-      issue.hubcap_session = self
+      if issue
+        issue.hubcap_session = self
+      end
+      
+      labels = opts[:labels] || []
+      issue.add_label(*labels) if labels.any?
+
       return issue
     end
 

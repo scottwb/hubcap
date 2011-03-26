@@ -209,11 +209,23 @@ describe Hubcap::Session do
         new_issue.body.should == issue.body
 
         issue.close!
-        orig_issues = @session.issues
-        orig_issues.should == existing_issues
+        @session.issues.should == existing_issues
+      end
+      
+      it "should be able to create a new open issue with labels" do
+        prefix = Digest::MD5.hexdigest(Time.now.to_s)[0,8]
+
+        issue = @session.add_issue(
+          :title  => "Label test #{prefix}",
+          :labels => ["#{prefix}-1", "#{prefix}-2"]
+        )
+
+        issue.labels.sort.should == ["#{prefix}-1", "#{prefix}-2"]
+        @session.find_issue(issue.number)
+        issue.labels.sort.should == ["#{prefix}-1", "#{prefix}-2"]
       end
 
-      it "should be able to create a new open issue with a user and labels" do
+      it "should be able to create a new open issue with a user" do
         pending
       end
     end
