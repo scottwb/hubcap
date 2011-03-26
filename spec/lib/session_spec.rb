@@ -161,6 +161,18 @@ describe Hubcap::Session do
         pending
       end
 
+      it "should be able to sort issues by votes" do
+        pending
+      end
+
+      it "should be able to sort issues by creation time" do
+        pending
+      end
+
+      it "should be able to sort issues by last-updated time" do
+        pending
+      end
+
       it "should be able to filter issues by label" do
         pending
       end
@@ -204,6 +216,20 @@ describe Hubcap::Session do
       it "should be able to create a new open issue with a user and labels" do
         pending
       end
+    end
+  end
+
+  describe "#find_issue" do
+    it "should be able to find a issue by number" do
+      pending
+    end
+
+    it "should return nil if the issue is not found" do
+      pending
+    end
+
+    it "should return an authenticated instance of Octopi::Issue" do
+      pending
     end
   end
 end
