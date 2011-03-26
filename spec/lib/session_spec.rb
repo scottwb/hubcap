@@ -120,16 +120,37 @@ describe Hubcap::Session do
     end
 
     describe "#issues" do
-      it "should return an empty array if the repository has no issues" do
-        @session.issues.should be_empty
-      end
-
       it "should return all open issues for the repository by default" do
-        pending
+        @session.issues.should be_empty
+        
+        @session.add_issue(:title => "Test Issue 1")
+        @session.add_issue(:title => "Test Issue 2").close!
+        @session.add_issue(:title => "Test Issue 3")
+
+        issues = @session.issues
+        issues.should have(2).issues
+        issues.map{|i| i.title}.should include "Test Issue 1"
+        issues.map{|i| i.title}.should_not include "Test Issue 2"
+        issues.map{|i| i.title}.should include "Test Issue 3"
       end
 
       it "should be able to return all closed issues for the repository" do
-        pending
+        prefix = Digest::MD5.hexdigest(Time.now.to_s)[0,8]
+
+        @session.add_issue(:title => "Test Issue #{prefix}.1").close!
+        @session.add_issue(:title => "Test Issue #{prefix}.2")
+        @session.add_issue(:title => "Test Issue #{prefix}.3").close!
+        
+        # Get all the closed issues, then filter to just the ones we
+        # made for this test case, since closed issues on github stay
+        # around forever.
+        closed_issues = @session.issues(:state => 'closed').select do |issue|
+          issue.title =~ /^Test Issue #{prefix}\.\d$/
+        end
+        closed_issues.should have(2).issues
+        closed_issues.map{|i| i.title}.should include "Test Issue #{prefix}.1"
+        closed_issues.map{|i| i.title}.should_not include "Test Issue #{prefix}.2"
+        closed_issues.map{|i| i.title}.should include "Test Issue #{prefix}.3"
       end
 
       it "should sort issues by number by default" do
