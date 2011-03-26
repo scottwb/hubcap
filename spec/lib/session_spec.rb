@@ -174,6 +174,10 @@ describe Hubcap::Session do
         new_issue = new_issues.find{|i| i.number == issue.number}
         new_issue.title.should == issue.title
         new_issue.body.should == issue.body
+
+        issue.close!
+        orig_issues = @session.issues
+        orig_issues.should == existing_issues
       end
 
       it "should be able to create a new open issue with a user and labels" do
