@@ -220,7 +220,7 @@ describe Hubcap::Session do
   end
 
   describe "#find_issue" do
-    it "should be able to find a issue by number" do
+    it "should be able to find an issue by number" do
       pending
     end
 
