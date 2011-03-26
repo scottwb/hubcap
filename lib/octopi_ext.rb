@@ -50,8 +50,8 @@ module Octopi
     end
   end
   
-  # Extend Octopi::Issue with a few class methods we'd like to have.
   class Issue
+    # Extend Octopi::Issue with a few class methods we'd like to have.
     def self.labels(options = {})
       ensure_hash(options)
       user, repo = gather_details(options)
@@ -70,18 +70,40 @@ module Octopi
       Api.api.get("/issues/label/remove/#{user}/#{repo}/#{options[:label]}")
     end
 
+    # Extend Octopi::Issue with a few instance methods we'd like to have.
+    def comments
+      Api.api.get(command_path("comments"))['comments'].map do |comment|
+        IssueComment.new(comment)
+      end
+    end
+    
+    # Make Octopi::Issues instance methods able to automatically take care
+    # of authenticating the call if they know what Hubcap::Session they
+    # were created from.
     attr_accessor :hubcap_session
-
-    method = :close!
-    authed_method   = "authed_#{method}".to_sym
-    unauthed_method = "unauthed_#{method}".to_sym
-    define_method(authed_method) do
-      hubcap_session.exec{send(unauthed_method)}
+    [
+      :close!,
+      :reopen!,
+      :save,
+      :comment,
+      :comments,
+      :add_label,
+      :remove_label
+    ].each do |method|
+      authed_method   = "authed_#{method}".to_sym
+      unauthed_method = "unauthed_#{method}".to_sym
+      define_method(authed_method) do |*args|
+        hubcap_session.exec{send(unauthed_method, *args)}
+      end
+      alias_method unauthed_method, method
+      define_method(method) do |*args|
+        send((hubcap_session ? authed_method : unauthed_method), *args)
+      end
     end
-    alias_method unauthed_method, method
-    define_method(method) do
-      send(hubcap_session ? authed_method : unauthed_method)
-    end
-
+  end
+  
+  # Give IssueComment the accessors it was supposed to have.
+  class IssueComment
+    attr_accessor :gravatar_id, :created_at, :body, :updated_at, :id, :user
   end
 end
