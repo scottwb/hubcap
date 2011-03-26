@@ -55,6 +55,9 @@ module Hubcap
       Hubcap.authenticated_with({:login => @username, :token => @token}, &block)
     end
 
+    ##############################
+    # Issues
+    ##############################
     def issues(opts = {})
       state            = opts[:state] || 'open'
       filter_by_labels = opts[:labels]
@@ -68,6 +71,26 @@ module Hubcap
       end
 
       return issues
+    end
+
+    def add_issue(opts = {})
+      params = {}
+      params[:title] = opts[:title] if opts[:title]
+      params[:body]  = opts[:description] if opts[:description]
+      issue = exec do
+        begin
+          Octopi::Issue.open(
+            :repo   => @repo,
+            :params => params
+          )
+        rescue Octopi::APIError => e
+          # Why do they raise an exception on a 201? That's a success!
+          # We'll just eat those ones, and re-raise the rest.
+          raise if e.message !~ /status 201/
+        end
+      end
+
+      return issue
     end
 
     ##############################

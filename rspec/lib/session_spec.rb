@@ -117,7 +117,7 @@ describe Hubcap::Session do
   describe "Issue Methods" do
     describe "#issues" do
       it "should return an empty array if the repository has no issues" do
-        pending
+        @session.issues.should be_empty
       end
 
       it "should return all open issues for the repository by default" do
@@ -151,7 +151,25 @@ describe Hubcap::Session do
 
     describe "#add_issue" do
       it "should create a new open issue, with no user or labels by default" do
-        pending
+        existing_issues = @session.issues
+
+        issue = @session.add_issue(
+          :title       => "New Issue",
+          :description => "This is a new issue."
+        )
+        issue.should_not be_nil
+        issue.title.should == "New Issue"
+        issue.body.should == "This is a new issue."
+        issue.number.should > existing_issues.size
+        existing_issues.map{|i| i.number}.should_not include issue.number
+
+        new_issues = @session.issues
+        new_issues.should have(existing_issues.size + 1).issues
+        new_issues.map{|i| i.number}.should include issue.number
+        
+        new_issue = new_issues.find{|i| i.number == issue.number}
+        new_issue.title.should == issue.title
+        new_issue.body.should == issue.body
       end
 
       it "should be able to create a new open issue with a user and labels" do
