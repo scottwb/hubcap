@@ -1,4 +1,4 @@
-***DEPRECATED:** I abandoned this project years ago. It never went anywhere and GitHub eventually added some of the features I was looking to build on top of their API anyway.*
+***DEPRECATED:*** *I abandoned this project years ago. It never went anywhere and GitHub eventually added some of the features I was looking to build on top of their API anyway.*
 
 Development Setup
 =================
